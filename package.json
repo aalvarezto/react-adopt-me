@@ -1,0 +1,25 @@
+{
+	"name": "adopt-me",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "git@github.com:aalvarezto/react-adopt-me.git",
+	"author": "Andres Alvarez <ndralvz@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"format": "prettier \"src/**/*.{js,jsx,html}\" --write",
+		"lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
+		"start": "parcel index.html",
+		"build": "parcel build index.html --out-dir build/output"
+	},
+	"devDependencies": {
+		"eslint": "^7.10.0",
+		"eslint-config-prettier": "^6.12.0",
+		"parcel-bundler": "^1.12.4",
+		"prettier": "^2.1.2"
+	},
+	"dependencies": {
+		"@frontendmasters/pet": "^1.0.3",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
+	}
+}
