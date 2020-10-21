@@ -3,9 +3,18 @@
 import React from "react"
 
 const heroFrom = media =>
-	media.length ? media[0].small : "http://placecorgi.com/300/300"
+	media.length
+		? media[0].small
+		: "http://placecorgi.com/300/300"
 
-const Pet = ({ name, animal, breed, media, location, id }) => (
+const Pet = ({
+	name,
+	animal,
+	breed,
+	media,
+	location,
+	id,
+}) => (
 	<div>
 		<a href={`/details/${id}`} className="pet">
 			<div className="image-container">
