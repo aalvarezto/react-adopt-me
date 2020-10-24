@@ -13,18 +13,20 @@ class Details extends Component {
 	}
 
 	componentDidMount = () =>
-		pet.animal(this.props.id).then(({ animal }) => {
-			console.log(animal)
-			this.setState({
-				name: animal.name,
-				animal: animal.type,
-				location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
-				description: animal.description,
-				media: animal.photos,
-				breed: animal.breeds.primary,
-				loading: false,
-			})
-		}, console.error)
+		pet
+			.animal(this.props.id)
+			.then(({ animal }) =>
+				this.setState({
+					name: animal.name,
+					animal: animal.type,
+					location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
+					description: animal.description,
+					media: animal.photos,
+					breed: animal.breeds.primary,
+					loading: false,
+				})
+			)
+			.catch(console.error)
 
 	render = () =>
 		this.state.loading
@@ -51,10 +53,12 @@ function displayPetFrom({
 				<h1>{name}</h1>
 				<h2>{`${animal} - ${breed} - ${location}`}</h2>
 				<button>Adopt {name}</button>
-				<p>
-					{description.replaceAll("&#039;", "'")}
-				</p>
+				<p>{fixEntitiesOf(description)}</p>
 			</div>
 		</div>
 	)
+}
+
+function fixEntitiesOf(x) {
+	return x ? x.replaceAll("&#039;", "'") : ""
 }
