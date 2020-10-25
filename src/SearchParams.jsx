@@ -4,29 +4,25 @@ import React, { useEffect, useState } from "react"
 import pet, { ANIMALS } from "@frontendmasters/pet"
 import useDropdown from "./useDropdown"
 import Results from "./Results"
+import { chain, prop, compose, nullish } from "./utils"
 
 const SearchParams = () => {
-	const [location, setLocation] = useState("Seattle, WA")
 	const [breeds, setBreeds] = useState([])
+	const [pets, setPets] = useState([])
+
+	const [location, setLocation] = useState("Seattle, WA")
 	const [animal, AnimalDropdown] = useDropdown("Animal", "dog", ANIMALS)
 	const [breed, BreedDropdown, setBreed] = useDropdown("Breed", "", breeds)
-	const [pets, setPets] = useState([])
 
 	useEffect(() => {
 		setBreeds([])
 		setBreed("")
-
-		pet.breeds(animal).then(responseWith(setBreeds)).catch(console.error)
+		requestBreeds(animal, setBreeds)
 	}, [animal, setBreed, setBreeds])
 
 	return (
 		<div className="search-params">
-			<form
-				onSubmit={e => {
-					e.preventDefault()
-					requestPets()
-				}}
-			>
+			<form onSubmit={requestData}>
 				<label htmlFor="location">
 					Location
 					<input
@@ -44,22 +40,23 @@ const SearchParams = () => {
 		</div>
 	)
 
-	async function requestPets() {
-		const { animals } = await pet.animals({
-			location,
-			breed,
-			type: animal,
-		})
-
-		setPets(animals ?? [])
+	function requestData(e) {
+		e.preventDefault()
+		requestPets({ location, breed, type: animal }, setPets)
 	}
 }
 
 export default SearchParams
 
-function responseWith(setter) {
-	return ({ breeds }) => {
-		const breedStrings = breeds.map(({ name }) => name)
-		setter(breedStrings)
-	}
+async function requestBreeds(data, useSetter) {
+	compose(
+		useSetter,
+		nullish,
+		chain("name"),
+		prop("breeds")
+	)(await pet.breeds(data))
+}
+
+async function requestPets(data, useSetter) {
+	compose(useSetter, nullish, prop("animals"))(await pet.animals(data))
 }
