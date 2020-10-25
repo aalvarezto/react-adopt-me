@@ -26,12 +26,12 @@ class Details extends Component {
 					loading: false,
 				})
 			)
-			.catch(console.error)
+			.catch(err => {
+				console.log(err)
+			})
 
 	render = () =>
-		this.state.loading
-			? displayLoading()
-			: displayPetFrom(this.state)
+		this.state.loading ? displayLoading() : displayPetFrom(this.state)
 }
 
 export default Details
@@ -40,13 +40,7 @@ function displayLoading() {
 	return <h1>loading...</h1>
 }
 
-function displayPetFrom({
-	animal,
-	breed,
-	location,
-	description,
-	name,
-}) {
+function displayPetFrom({ animal, breed, location, description, name }) {
 	return (
 		<div className="details">
 			<div>

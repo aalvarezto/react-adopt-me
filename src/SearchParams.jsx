@@ -6,30 +6,17 @@ import useDropdown from "./useDropdown"
 import Results from "./Results"
 
 const SearchParams = () => {
-	const [location, setLocation] = useState("Sattle, WA")
+	const [location, setLocation] = useState("Seattle, WA")
 	const [breeds, setBreeds] = useState([])
 	const [animal, AnimalDropdown] = useDropdown("Animal", "dog", ANIMALS)
 	const [breed, BreedDropdown, setBreed] = useDropdown("Breed", "", breeds)
 	const [pets, setPets] = useState([])
 
-	const requestPets = async () => {
-		const { animals } = await pet.animals({
-			location,
-			breed,
-			type: animal,
-		})
-
-		setPets(animals ?? [])
-	}
-
 	useEffect(() => {
 		setBreeds([])
 		setBreed("")
 
-		pet.breeds(animal).then(({ breeds }) => {
-			const breedStrings = breeds.map(({ name }) => name)
-			setBreeds(breedStrings)
-		}, console.error)
+		pet.breeds(animal).then(responseWith(setBreeds)).catch(console.error)
 	}, [animal, setBreed, setBreeds])
 
 	return (
@@ -56,6 +43,23 @@ const SearchParams = () => {
 			<Results pets={pets} />
 		</div>
 	)
+
+	async function requestPets() {
+		const { animals } = await pet.animals({
+			location,
+			breed,
+			type: animal,
+		})
+
+		setPets(animals ?? [])
+	}
 }
 
 export default SearchParams
+
+function responseWith(setter) {
+	return ({ breeds }) => {
+		const breedStrings = breeds.map(({ name }) => name)
+		setter(breedStrings)
+	}
+}

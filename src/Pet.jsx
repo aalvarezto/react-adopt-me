@@ -2,23 +2,11 @@
 
 import React from "react"
 
-const heroFrom = media =>
-	media.length
-		? media[0].small
-		: "http://placecorgi.com/300/300"
-
-const Pet = ({
-	name,
-	animal,
-	breed,
-	media,
-	location,
-	id,
-}) => (
+const Pet = ({ name, animal, breed, media, location, id }) => (
 	<div>
 		<a href={`/details/${id}`} className="pet">
 			<div className="image-container">
-				<img src={heroFrom(media)} alt={name} />
+				<img src={getHeroFrom(media)} alt={name} />
 			</div>
 			<div className="info">
 				<h1>{name}</h1>
@@ -29,3 +17,9 @@ const Pet = ({
 )
 
 export default Pet
+
+function getHeroFrom(dataMedia) {
+	return dataMedia.length
+		? dataMedia[0].small
+		: "http://placecorgi.com/300/300"
+}
