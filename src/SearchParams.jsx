@@ -48,15 +48,19 @@ const SearchParams = () => {
 
 export default SearchParams
 
-async function requestBreeds(data, useSetter) {
+async function requestBreeds(fetchThisData, useSetter) {
 	compose(
 		useSetter,
 		nullish,
 		chain("name"),
 		prop("breeds")
-	)(await pet.breeds(data))
+	)(await pet.breeds(fetchThisData))
 }
 
-async function requestPets(data, useSetter) {
-	compose(useSetter, nullish, prop("animals"))(await pet.animals(data))
+async function requestPets(fetchThisData, useSetter) {
+	compose(
+		useSetter,
+		nullish,
+		prop("animals")
+	)(await pet.animals(fetchThisData))
 }
