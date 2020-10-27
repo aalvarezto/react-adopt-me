@@ -2,6 +2,9 @@
 
 import React, { Component } from "react"
 import pet from "@frontendmasters/pet"
+import Carousel from "./Carousel"
+import ErrorBoundary from "./ErrorBoundary"
+import ThemeContext from "./ThemeContext"
 
 class Details extends Component {
 	constructor(props) {
@@ -26,27 +29,38 @@ class Details extends Component {
 					loading: false,
 				})
 			)
-			.catch(err => {
-				console.log(err)
-			})
+			.catch(console.error)
 
 	render = () =>
 		this.state.loading ? displayLoading() : displayPetFrom(this.state)
 }
 
-export default Details
+export default function DetailsWithErrorBoundary(props) {
+	return (
+		<ErrorBoundary>
+			<Details {...props} />
+		</ErrorBoundary>
+	)
+}
 
 function displayLoading() {
 	return <h1>loading...</h1>
 }
 
-function displayPetFrom({ animal, breed, location, description, name }) {
+function displayPetFrom({ animal, breed, location, description, name, media }) {
 	return (
 		<div className="details">
+			<Carousel media={media} />
 			<div>
 				<h1>{name}</h1>
 				<h2>{`${animal} - ${breed} - ${location}`}</h2>
-				<button>Adopt {name}</button>
+				<ThemeContext.Consumer>
+					{([theme]) => (
+						<button style={{ backgroundColor: theme }}>
+							Adopt {name}{" "}
+						</button>
+					)}
+				</ThemeContext.Consumer>
 				<p>{fixEntitiesOf(description)}</p>
 			</div>
 		</div>
