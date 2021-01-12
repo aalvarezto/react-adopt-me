@@ -10,7 +10,6 @@ import ThemeContext from "./ThemeContext"
 const SearchParams = () => {
 	const [breeds, setBreeds] = useState([])
 	const [pets, setPets] = useState([])
-
 	const [location, setLocation] = useState("Seattle, WA")
 	const [animal, AnimalDropdown] = useDropdown("Animal", "dog", ANIMALS)
 	const [breed, BreedDropdown, setBreed] = useDropdown("Breed", "", breeds)
